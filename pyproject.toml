@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nano-empire-tollbooth"
+version = "0.2.3"
+description = "Monetize any Python function with one decorator. 100 free calls, then Pro for ledger analytics, CSV/JSON export, and higher limits."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [
+    { name = "Nano Empire", email = "ops@nano-empire.dev" },
+]
+keywords = ["monetize", "python", "decorator", "billing", "micropayment", "agent", "x402", "api", "pay-per-call", "sdk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
+
+[project.scripts]
+tollbooth = "nano_empire_tollbooth.cli:main"
+
+[project.urls]
+Homepage = "https://neuralempireai.com"
+Documentation = "https://neuralempireai.com/docs/quickstart.html"
+Repository = "https://github.com/roblambert9/nano-empire-tollbooth"
+"Issue Tracker" = "https://github.com/roblambert9/nano-empire-tollbooth/issues"
+"Live Demo" = "https://neuralempireai.com/simulator/"
+"Tollbooth Pro" = "https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h"
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nano_empire_tollbooth*"]
+
+[tool.setuptools.package-data]
+nano_empire_tollbooth = ["py.typed"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
