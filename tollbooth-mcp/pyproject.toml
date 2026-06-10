@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tollbooth-mcp"
+version = "0.1.0"
+description = "MCP server that demos agent pay-per-call inside your own AI. Paper mode: 402 challenge, payment, signed receipt — no real money moves."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Nano Empire", email = "ops@nano-empire.dev" }]
+keywords = ["mcp", "model-context-protocol", "x402", "agent-payments", "monetize", "pay-per-call", "demo"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "mcp>=1.2",
+    "nano-empire-tollbooth>=0.2.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+tollbooth-mcp = "tollbooth_mcp.server:main"
+
+[project.urls]
+Homepage = "https://neuralempireai.com"
+Repository = "https://github.com/roblambert9/nano-empire-tollbooth"
+"Live Demo" = "https://neuralempireai.com/simulator/"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tollbooth_mcp*"]
