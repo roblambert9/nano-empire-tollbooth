@@ -1,0 +1,13 @@
+# Smithery configuration — https://smithery.ai
+# tollbooth-mcp: paper-mode x402 payment-loop demo. No real money moves.
+startCommand:
+  type: stdio
+  configSchema:
+    # No configuration required — paper mode runs out of the box.
+    type: object
+    properties: {}
+  commandFunction: |-
+    (config) => ({ "command": "tollbooth-mcp", "args": [] })
+build:
+  dockerfile: Dockerfile
+  dockerBuildPath: .
