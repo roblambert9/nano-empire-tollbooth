@@ -1,0 +1,3 @@
+*.py text eol=lf
+*.md text
+*.toml text
