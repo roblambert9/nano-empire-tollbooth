@@ -468,6 +468,7 @@ def monetize(
     *,
     source_agent: str = "caller",
     target_agent: str = "self",
+    rail: str = "paper",
 ) -> Callable[[F], F]:
     """
     Wrap any Python function with a tollbooth charge.
@@ -477,7 +478,7 @@ def monetize(
         def summarize(text: str) -> str:
             return my_llm(text)
 
-        @monetize(price_usd=0.05)
+        @monetize(price_usd=0.05, rail="stripe")
         async def translate(text: str, lang: str) -> str:
             return await my_async_llm(text, lang)
 
@@ -488,7 +489,13 @@ def monetize(
         price_usd: toll per call in USD (default $0.001)
         source_agent: agent identity of the caller
         target_agent: agent identity of the function owner
+        rail: settlement rail — "paper" (default), "stripe" (batch netting
+            via `tollbooth settle`), or "x402" (operator-wired verifier).
+            Stub rails (e.g. "ap4m") fail fast at decoration time.
     """
+    from .rails import validate_rail_for_decoration
+    rail_adapter = validate_rail_for_decoration(rail)
+
     def decorator(fn: F) -> F:
         fn_key = _get_fn_key(fn)
         booth = get_tollbooth()
@@ -515,6 +522,7 @@ def monetize(
 
                 return result
 
+            async_wrapper.tollbooth_rail = rail_adapter.name  # type: ignore[attr-defined]
             return async_wrapper  # type: ignore[return-value]
         else:
             @functools.wraps(fn)
@@ -557,6 +565,7 @@ def monetize(
 
                 return result
 
+            sync_wrapper.tollbooth_rail = rail_adapter.name  # type: ignore[attr-defined]
             return sync_wrapper  # type: ignore[return-value]
 
     return decorator

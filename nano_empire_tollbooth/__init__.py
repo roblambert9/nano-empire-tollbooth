@@ -1,5 +1,7 @@
 """nano_empire_tollbooth — Monetize any Python function with one decorator."""
 
+from .rails import RAILS, RailAdapter, get_rail
+from .settlement import SettlementResult, settle
 from .pro import get_license, pro_enabled, set_license, tier
 from .tollbooth import (
     SettlementStatus,
@@ -16,6 +18,7 @@ from .tollbooth import (
 )
 
 __all__ = [
+    "RAILS", "RailAdapter", "get_rail", "SettlementResult", "settle",
     "SettlementStatus",
     "TollRecord",
     "Tollbooth",

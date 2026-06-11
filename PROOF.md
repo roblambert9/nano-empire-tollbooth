@@ -74,3 +74,18 @@ no settlement: live settlement requires operator wiring ... fails closed by desi
 
 Reproduce: write any JSONL ledger of released tolls and run the commands above.
 Paper mode simulates; the SDK never moves real money itself.
+
+## Proof 3: rail adapters (2026-06-11)
+
+One decorator, every settlement rail. Stubs fail fast — no pretend support:
+
+```
+>>> @monetize(price_usd=0.01, rail="stripe")
+... def summarize(text): ...
+>>> summarize.tollbooth_rail
+'stripe'   # settles via batch netting: `tollbooth settle`
+
+>>> @monetize(price_usd=0.01, rail="ap4m")
+NotImplementedError: rail 'ap4m' is a stub: Mastercard has not published an
+integration spec we can implement against ... no pretend support
+```
