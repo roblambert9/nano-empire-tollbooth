@@ -7,6 +7,7 @@ Real, offline value over your local ledger:
   tollbooth report [--json]        aggregate the ledger: calls, spend, by status
   tollbooth verify                 integrity check of the ledger file
   tollbooth export --format csv    export the ledger (Pro feature)
+  tollbooth settle                 net released tolls into one settlement
 
 All commands read the JSONL ledger written by the tollbooth. Point at a specific
 file with --ledger PATH.
@@ -131,6 +132,20 @@ def cmd_export(args) -> int:
     return 0
 
 
+def cmd_settle(args) -> int:
+    from .settlement import DEFAULT_MINIMUM_USD, settle
+    minimum = args.minimum if args.minimum is not None else DEFAULT_MINIMUM_USD
+    res = settle(Path(args.ledger), paper=not args.live, minimum_usd=minimum)
+    if res.settled:
+        print(f"SETTLED {res.batch_id}: {res.call_count} call(s) netted to "
+              f"${res.net_usd:.2f} ({res.mode} mode)")
+        print(f"record: {res.settlements_path}")
+        return 0
+    print(f"no settlement: {res.reason} "
+          f"({res.call_count} pending call(s), net ${res.net_usd:.2f})")
+    return 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="tollbooth", description="Tollbooth ledger tools.")
     p.add_argument("--ledger", default=str(_DEFAULT_LEDGER), help="path to toll_ledger.jsonl")
@@ -146,6 +161,13 @@ def build_parser() -> argparse.ArgumentParser:
     e.add_argument("--format", choices=["csv", "json"], default="csv")
     e.add_argument("--out", default=None)
     e.set_defaults(func=cmd_export)
+    st = sub.add_parser("settle",
+                        help="net released tolls into one settlement (batch netting)")
+    st.add_argument("--minimum", type=float, default=None,
+                    help="minimum net USD to settle (default 0.50)")
+    st.add_argument("--live", action="store_true",
+                    help="live mode (fails closed: operator wiring required)")
+    st.set_defaults(func=cmd_settle)
     return p
 
 

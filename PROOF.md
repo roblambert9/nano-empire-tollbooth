@@ -54,3 +54,23 @@ endpoint already calls the verifier. Stripe's ~50¢ floor is why cent-level mete
 settles on-chain; the $19/mo Tollbooth Pro subscription is the parallel fiat path.
 
 Tests: `33 passed`. Package: https://pypi.org/project/nano-empire-tollbooth/
+
+## Proof 2: batch-netting settlement (2026-06-11)
+
+Card rails can't clear a cent. `tollbooth settle` nets released tolls into one
+charge-sized settlement — sub-cent pricing on fiat, no wallet:
+
+```
+$ # ledger: 50 released 1-cent calls
+$ tollbooth --ledger toll_ledger.jsonl settle
+SETTLED settle-094d8081c536: 50 call(s) netted to $0.50 (paper mode)
+
+$ tollbooth --ledger toll_ledger.jsonl settle      # idempotent
+no settlement: nothing to settle (0 pending call(s), net $0.00)
+
+$ tollbooth --ledger toll_ledger.jsonl settle --live
+no settlement: live settlement requires operator wiring ... fails closed by design
+```
+
+Reproduce: write any JSONL ledger of released tolls and run the commands above.
+Paper mode simulates; the SDK never moves real money itself.
