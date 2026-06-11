@@ -89,3 +89,20 @@ One decorator, every settlement rail. Stubs fail fast — no pretend support:
 NotImplementedError: rail 'ap4m' is a stub: Mastercard has not published an
 integration spec we can implement against ... no pretend support
 ```
+
+## Proof 4: spec-exact x402 v1 wire format (2026-06-11)
+
+Real field names from coinbase/x402 specification v1 — not "x402-style":
+
+```
+402 body: {"x402Version": 1, "error": "X-PAYMENT header is required",
+           "accepts": [{"scheme","network","maxAmountRequired","asset","payTo",
+                        "resource","description","maxTimeoutSeconds", ...}]}
+X-PAYMENT: base64(PaymentPayload JSON)  ->  decode -> structural verify:
+  True - structurally valid (signature NOT verified — paper mode)
+X-PAYMENT-RESPONSE: {"success": true, "transaction": "0x...", "network", "payer"}
+```
+
+Structural verification checks fields, version, recipient, amount, expiry.
+Signature verification belongs to the operator's facilitator — the SDK is
+honest about what paper mode does and does not prove.
