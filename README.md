@@ -31,6 +31,7 @@ tollbooth report                 # aggregate: calls, spend, by status
 tollbooth report --json          # same, machine readable
 tollbooth verify                 # integrity check of the ledger file
 tollbooth export --format csv    # export the ledger (Pro)
+tollbooth settle                 # batch-net released tolls into one charge-sized settlement (paper mode; --live fails closed until you wire your own rail)
 ```
 
 ## Free vs Pro
