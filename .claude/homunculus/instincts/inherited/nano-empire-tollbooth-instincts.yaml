@@ -1,0 +1,259 @@
+# Instincts generated from https://github.com/roblambert9/nano-empire-tollbooth
+# Generated: 2026-06-13T01:23:20.954Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: nano-empire-tollbooth-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Commit Length
+
+## Action
+
+Write moderate-length commit messages (~73 characters)
+
+## Evidence
+
+- Average commit message length: 73 chars
+- Based on 1 commits
+
+---
+id: nano-empire-tollbooth-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Naming Files
+
+## Action
+
+Use snake_case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: snake_case
+
+---
+id: nano-empire-tollbooth-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: nano-empire-tollbooth-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: nano-empire-tollbooth-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: nano-empire-tollbooth-instinct-file-naming
+trigger: "When creating a new source file"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct File Naming
+
+## Action
+
+Name the file using snake_case
+
+## Evidence
+
+- Pattern in namingConventions.files: snake_case
+
+---
+id: nano-empire-tollbooth-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Function Naming
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions: camelCase
+
+---
+id: nano-empire-tollbooth-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Class Naming
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes: PascalCase
+
+---
+id: nano-empire-tollbooth-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Constant Naming
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: nano-empire-tollbooth-instinct-import-style
+trigger: "When importing modules within the package"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Import Style
+
+## Action
+
+Use relative imports
+
+## Evidence
+
+- Pattern in importStyle: relative
+
+---
+id: nano-empire-tollbooth-instinct-export-style
+trigger: "When exporting functions or classes from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: nano-empire-tollbooth-instinct-test-location
+trigger: "When adding new tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Test Location
+
+## Action
+
+Place test files in a separate directory from source code
+
+## Evidence
+
+- Pattern in architecture.testLocation: separate
+
+---
+id: nano-empire-tollbooth-instinct-git-commit-format
+trigger: "When writing a commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: roblambert9/nano-empire-tollbooth
+---
+
+# Nano Empire Tollbooth Instinct Git Commit Format
+
+## Action
+
+Use freeform commit messages without a strict prefix, optionally including version tags and concise descriptions
+
+## Evidence
+
+- Pattern in commits.type: freeform
+- Example: 'v0.3.0: ship dogfood/ reproduce demo + document settle CLI + version sync'
+
