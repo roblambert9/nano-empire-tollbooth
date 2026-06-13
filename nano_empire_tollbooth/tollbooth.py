@@ -9,7 +9,8 @@ Monetize any Python function with one decorator.
     def summarize(text: str) -> str:
         return my_llm(text)
 
-Free tier: 100 paper-mode calls. Upgrade to Tollbooth Pro ($19/mo) for live payments.
+Free tier: unlimited paper-mode calls (a one-time nag after 100; $10/day metered cap).
+Tollbooth Pro ($19/mo) raises the daily cap and adds CSV/JSON export + priority support.
 """
 
 from __future__ import annotations
@@ -432,7 +433,7 @@ def _check_usage(fn_key: str, price_usd: float) -> bool:
         print(
             f"\n{'=' * 60}\n"
             f"  nano-empire-tollbooth: {_FREE_LIMIT} free calls used\n"
-            f"  Upgrade to Tollbooth Pro — $19/mo for live payments\n"
+            f"  Upgrade to Tollbooth Pro — $19/mo: higher daily cap, exports, priority support\n"
             f"  {_UPGRADE_URL}\n"
             f"{'=' * 60}\n",
             file=sys.stderr,
