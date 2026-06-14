@@ -10,8 +10,9 @@ def summarize(text: str) -> str:
     return my_llm(text)
 ```
 
-Every call is metered and logged to a local JSONL ledger. The first 100 calls
-print an upgrade prompt once you cross the limit; the function keeps working.
+Every call is metered and logged to a local JSONL ledger. Paper-mode metering is
+unlimited and free — a one-time upgrade prompt prints around call 100, and the
+function keeps working (it nags, it does not block).
 
 ## Install
 
@@ -31,6 +32,7 @@ tollbooth report                 # aggregate: calls, spend, by status
 tollbooth report --json          # same, machine readable
 tollbooth verify                 # integrity check of the ledger file
 tollbooth export --format csv    # export the ledger (Pro)
+tollbooth settle                 # batch-net released tolls into one charge-sized settlement (paper mode; --live fails closed until you wire your own rail)
 ```
 
 ## Free vs Pro
@@ -46,16 +48,21 @@ What Pro actually unlocks today. No overstated claims.
 | `tollbooth export` (CSV/JSON) | No | Yes |
 | Default daily cap | $10 / agent | $1000 / agent |
 
-Activate Pro by setting the key you receive after purchase:
+**Pro is in private setup and not yet purchasable.** The licensing pipeline
+(Ed25519-signed keys + checkout issuance) is built and tested but not wired live
+yet — so there's no buy link here on purpose. Watch the
+[repo](https://github.com/roblambert9/nano-empire-tollbooth) for availability.
+
+When you have a key, activate it with:
 
 ```bash
 export TOLLBOOTH_LICENSE_KEY=your-key
 ```
 
-Get a key: https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h
-
-> License validation is an offline check today (honor-system v1). Server-side
-> validation is on the roadmap.
+> License validation is a real offline check: each key carries an Ed25519
+> signature from the issuer plus an expiry, verified locally with the published
+> public key — no secret, no phone-home. A random, tampered, or expired key does
+> not unlock Pro. Online revocation before expiry is on the roadmap.
 
 ## Live settlement (experimental)
 

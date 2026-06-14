@@ -9,7 +9,8 @@ Monetize any Python function with one decorator.
     def summarize(text: str) -> str:
         return my_llm(text)
 
-Free tier: 100 paper-mode calls. Upgrade to Tollbooth Pro ($19/mo) for live payments.
+Free tier: unlimited paper-mode calls (a one-time nag after 100; $10/day metered cap).
+Tollbooth Pro ($19/mo) raises the daily cap and adds CSV/JSON export + priority support.
 """
 
 from __future__ import annotations
@@ -400,7 +401,7 @@ def reset_tollbooth() -> None:
 
 # ── Usage Counter ───────────────────────────────────────────────────────
 
-_UPGRADE_URL = "https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h"
+_UPGRADE_URL = "https://github.com/roblambert9/nano-empire-tollbooth"
 _FREE_LIMIT = 100
 
 _usage_counts: dict[str, int] = {}
@@ -432,7 +433,7 @@ def _check_usage(fn_key: str, price_usd: float) -> bool:
         print(
             f"\n{'=' * 60}\n"
             f"  nano-empire-tollbooth: {_FREE_LIMIT} free calls used\n"
-            f"  Upgrade to Tollbooth Pro — $19/mo for live payments\n"
+            f"  Upgrade to Tollbooth Pro (higher daily cap, exports, priority support) — coming soon\n"
             f"  {_UPGRADE_URL}\n"
             f"{'=' * 60}\n",
             file=sys.stderr,
@@ -482,8 +483,8 @@ def monetize(
         async def translate(text: str, lang: str) -> str:
             return await my_async_llm(text, lang)
 
-    First 100 calls are free (paper mode). After that, prints an upgrade
-    prompt to stderr. The function keeps working — we nag, not block.
+    Paper-mode calls are free and unlimited. A one-time upgrade prompt prints
+    to stderr around call 100; the function keeps working — we nag, not block.
 
     Args:
         price_usd: toll per call in USD (default $0.001)

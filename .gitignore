@@ -9,3 +9,7 @@ build/
 *.jsonl
 logs/
 .env
+
+# never commit PyPI credentials
+.pypirc
+*.pypirc
