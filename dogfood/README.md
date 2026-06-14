@@ -41,9 +41,10 @@ agent, three things are required. None of them are code we can fake:
 ## Why this is the honest path
 
 Stripe cannot charge 1 cent (its floor is about 50 cents), so cent-level
-metering has to settle on-chain. The Stripe Tollbooth Pro link
-(https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h) remains the faster path to a
-real dollar at the 19 USD/mo subscription tier and should run in parallel.
+metering has to settle on-chain. A flat Tollbooth Pro subscription ($19/mo for
+export + higher caps + support) is the planned parallel fiat path, but it is in
+private setup and not yet purchasable — no live checkout link until the issuance
+webhook is wired.
 
 ## Files
 - paid_endpoint.py : the x402-gated, tollbooth-metered FastAPI service

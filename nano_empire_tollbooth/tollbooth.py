@@ -401,7 +401,7 @@ def reset_tollbooth() -> None:
 
 # ── Usage Counter ───────────────────────────────────────────────────────
 
-_UPGRADE_URL = "https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h"
+_UPGRADE_URL = "https://github.com/roblambert9/nano-empire-tollbooth"
 _FREE_LIMIT = 100
 
 _usage_counts: dict[str, int] = {}
@@ -433,7 +433,7 @@ def _check_usage(fn_key: str, price_usd: float) -> bool:
         print(
             f"\n{'=' * 60}\n"
             f"  nano-empire-tollbooth: {_FREE_LIMIT} free calls used\n"
-            f"  Upgrade to Tollbooth Pro — $19/mo: higher daily cap, exports, priority support\n"
+            f"  Upgrade to Tollbooth Pro (higher daily cap, exports, priority support) — coming soon\n"
             f"  {_UPGRADE_URL}\n"
             f"{'=' * 60}\n",
             file=sys.stderr,

@@ -45,7 +45,6 @@ Documentation = "https://neuralempireai.com/docs/quickstart.html"
 Repository = "https://github.com/roblambert9/nano-empire-tollbooth"
 "Issue Tracker" = "https://github.com/roblambert9/nano-empire-tollbooth/issues"
 "Live Demo" = "https://neuralempireai.com/simulator/"
-"Tollbooth Pro" = "https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h"
 
 
 [tool.setuptools.packages.find]

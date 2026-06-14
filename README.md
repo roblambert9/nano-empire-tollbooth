@@ -48,13 +48,16 @@ What Pro actually unlocks today. No overstated claims.
 | `tollbooth export` (CSV/JSON) | No | Yes |
 | Default daily cap | $10 / agent | $1000 / agent |
 
-Activate Pro by setting the key you receive after purchase:
+**Pro is in private setup and not yet purchasable.** The licensing pipeline
+(Ed25519-signed keys + checkout issuance) is built and tested but not wired live
+yet — so there's no buy link here on purpose. Watch the
+[repo](https://github.com/roblambert9/nano-empire-tollbooth) for availability.
+
+When you have a key, activate it with:
 
 ```bash
 export TOLLBOOTH_LICENSE_KEY=your-key
 ```
-
-Get a key: https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h
 
 > License validation is a real offline check: each key carries an Ed25519
 > signature from the issuer plus an expiry, verified locally with the published
