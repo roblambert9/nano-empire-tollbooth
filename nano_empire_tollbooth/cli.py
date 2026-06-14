@@ -114,7 +114,7 @@ def cmd_status(args) -> int:
         print(f"License:     valid ({lic['plan']}, {when})")
     elif get_license():
         print(f"License:     invalid — {lic['reason']}")
-    print("Free limit:  100 calls/function (paper mode)")
+    print("Free tier:   unlimited paper-mode calls; one-time nag after 100; $10/day spend cap")
     print(f"Ledger:      {args.ledger}  ({len(records)} records)")
     if not pro_enabled():
         print(f"Upgrade to Pro (export + higher caps + support): {_UPGRADE_URL}")
