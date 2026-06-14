@@ -65,7 +65,7 @@ if __name__ == "__main__":
     print("  Every call above was metered and logged.")
     print("  Paper mode: no real charges. Full functionality.")
     print()
-    print("  Upgrade to Tollbooth Pro ($19/mo) for live payments:")
+    print("  Upgrade to Tollbooth Pro ($19/mo): ledger export, higher caps, priority support:")
     print("  https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h")
     print()
     print("  Powered by Nano Empire — pip install nano-empire-tollbooth")

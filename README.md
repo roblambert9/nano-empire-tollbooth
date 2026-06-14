@@ -10,8 +10,9 @@ def summarize(text: str) -> str:
     return my_llm(text)
 ```
 
-Every call is metered and logged to a local JSONL ledger. The first 100 calls
-print an upgrade prompt once you cross the limit; the function keeps working.
+Every call is metered and logged to a local JSONL ledger. Paper-mode metering is
+unlimited and free — a one-time upgrade prompt prints around call 100, and the
+function keeps working (it nags, it does not block).
 
 ## Install
 
@@ -55,8 +56,10 @@ export TOLLBOOTH_LICENSE_KEY=your-key
 
 Get a key: https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h
 
-> License validation is an offline check today (honor-system v1). Server-side
-> validation is on the roadmap.
+> License validation is a real offline check: each key carries an Ed25519
+> signature from the issuer plus an expiry, verified locally with the published
+> public key — no secret, no phone-home. A random, tampered, or expired key does
+> not unlock Pro. Online revocation before expiry is on the roadmap.
 
 ## Live settlement (experimental)
 

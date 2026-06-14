@@ -7,6 +7,8 @@ import os
 import pytest
 
 from nano_empire_tollbooth import (
+    issue_license,
+    make_keypair,
     monetize,
     pro_enabled,
     reset_tollbooth,
@@ -26,16 +28,42 @@ def clear_license():
     os.environ.pop("TOLLBOOTH_LICENSE_KEY", None)
 
 
+@pytest.fixture()
+def issue(monkeypatch):
+    """A real signed-key issuer wired to a fresh test keypair.
+
+    Publishes the matching public key via TOLLBOOTH_LICENSE_PUBKEY so that
+    pro.py's verify path (which takes no explicit pubkey) can validate it.
+    """
+    priv, pub = make_keypair()
+    monkeypatch.setenv("TOLLBOOTH_LICENSE_PUBKEY", pub)
+
+    def _issue(**kw):
+        kw.setdefault("email", "buyer@example.com")
+        kw.setdefault("sub_id", "sub_test")
+        return issue_license(private_hex=priv, **kw)
+
+    return _issue
+
+
 # ── license gate ──────────────────────────────────────────────────────────
 def test_pro_disabled_by_default():
     assert pro_enabled() is False
     assert tier() == "free"
 
 
-def test_set_license_enables_pro():
-    set_license("PRO-ABCDEFGH")
+def test_valid_signed_key_enables_pro(issue):
+    set_license(issue())
     assert pro_enabled() is True
     assert tier() == "pro"
+
+
+def test_arbitrary_string_does_not_enable_pro(issue):
+    # Regression: the old gate accepted any >=8-char string. It must not.
+    set_license("PRO-ABCDEFGH")
+    assert pro_enabled() is False
+    set_license("any-long-enough-string")
+    assert pro_enabled() is False
 
 
 def test_short_key_rejected():
@@ -43,9 +71,18 @@ def test_short_key_rejected():
     assert pro_enabled() is False
 
 
-def test_env_license(monkeypatch):
-    monkeypatch.setenv("TOLLBOOTH_LICENSE_KEY", "ENVKEY-123456")
-    assert pro_enabled() is True
+def test_expired_key_does_not_enable_pro(issue):
+    set_license(issue(issued_at=1_000, expires_at=2_000))
+    assert pro_enabled() is False  # exp is in the distant past
+
+
+def test_env_license(issue):
+    import os as _os
+    _os.environ["TOLLBOOTH_LICENSE_KEY"] = issue()
+    try:
+        assert pro_enabled() is True
+    finally:
+        _os.environ.pop("TOLLBOOTH_LICENSE_KEY", None)
 
 
 # ── nag suppression ───────────────────────────────────────────────────────
@@ -59,9 +96,9 @@ def test_free_shows_nag(capsys):
     assert "Upgrade to Tollbooth Pro" in capsys.readouterr().err
 
 
-def test_pro_suppresses_nag(capsys):
+def test_pro_suppresses_nag(capsys, issue):
     reset_tollbooth(); reset_usage()
-    set_license("PRO-ABCDEFGH")
+    set_license(issue())
     @monetize(price_usd=0.0)
     def f():
         return 1
@@ -111,8 +148,8 @@ def test_export_gated_without_license(tmp_path, capsys):
     assert "Pro feature" in capsys.readouterr().out
 
 
-def test_export_works_with_license(tmp_path):
-    set_license("PRO-ABCDEFGH")
+def test_export_works_with_license(tmp_path, issue):
+    set_license(issue())
     led = tmp_path / "l.jsonl"; _write_ledger(led)
     out = tmp_path / "out.csv"
     assert cli.main(["--ledger", str(led), "export", "--format", "csv", "--out", str(out)]) == 0

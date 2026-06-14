@@ -22,10 +22,16 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from .pro import pro_enabled, tier
+from .pro import get_license, license_status, pro_enabled, tier
 
 _UPGRADE_URL = "https://buy.stripe.com/14A9ATaI76K8gjo9JE1Nu0h"
 _DEFAULT_LEDGER = Path(__file__).resolve().parent.parent / "logs" / "toll_ledger.jsonl"
+
+
+def _fmt_unix(ts: int) -> str:
+    """Format a unix timestamp as a short UTC date for display."""
+    from datetime import datetime, timezone
+    return datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
 
 
 def _load(ledger: Path) -> tuple[list[dict], list[str]]:
@@ -99,12 +105,19 @@ def cmd_verify(args) -> int:
 
 def cmd_status(args) -> int:
     records, _ = _load(Path(args.ledger))
+    lic = license_status()
     print(f"Tier:        {tier()}")
     print(f"Pro active:  {pro_enabled()}")
-    print(f"Free limit:  100 calls/function (paper mode)")
+    if lic["valid"]:
+        exp = lic["expires_at"]
+        when = "no expiry" if exp is None else f"expires {_fmt_unix(exp)}"
+        print(f"License:     valid ({lic['plan']}, {when})")
+    elif get_license():
+        print(f"License:     invalid — {lic['reason']}")
+    print("Free limit:  100 calls/function (paper mode)")
     print(f"Ledger:      {args.ledger}  ({len(records)} records)")
     if not pro_enabled():
-        print(f"Upgrade to Pro for exports and higher caps: {_UPGRADE_URL}")
+        print(f"Upgrade to Pro (export + higher caps + support): {_UPGRADE_URL}")
     return 0
 
 

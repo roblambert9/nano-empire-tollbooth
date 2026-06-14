@@ -483,8 +483,8 @@ def monetize(
         async def translate(text: str, lang: str) -> str:
             return await my_async_llm(text, lang)
 
-    First 100 calls are free (paper mode). After that, prints an upgrade
-    prompt to stderr. The function keeps working — we nag, not block.
+    Paper-mode calls are free and unlimited. A one-time upgrade prompt prints
+    to stderr around call 100; the function keeps working — we nag, not block.
 
     Args:
         price_usd: toll per call in USD (default $0.001)

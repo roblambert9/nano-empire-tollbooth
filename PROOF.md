@@ -51,7 +51,8 @@ The mock verifier proves the *protocol*. To take real currency, swap one env var
 to an on-chain verifier (`DOGFOOD_VERIFIER=onchain`, `DOGFOOD_FACILITATOR_URL=...`)
 pointed at a funded stablecoin receiving wallet. No application code changes — the
 endpoint already calls the verifier. Stripe's ~50¢ floor is why cent-level metering
-settles on-chain; the $19/mo Tollbooth Pro subscription is the parallel fiat path.
+settles on-chain; Tollbooth Pro ($19/mo) is a separate subscription for ledger
+export, higher caps, and priority support — not a payment rail.
 
 Tests: `33 passed`. Package: https://pypi.org/project/nano-empire-tollbooth/
 

@@ -1,25 +1,33 @@
 """
 Tollbooth Pro license gating (self-contained, offline).
 
-Pro is unlocked by setting TOLLBOOTH_LICENSE_KEY in the environment, or by
-calling set_license(key) at runtime. Purchasing Tollbooth Pro issues you a key.
+Pro is unlocked by setting TOLLBOOTH_LICENSE_KEY in the environment to a key
+issued at purchase, or by calling set_license(key) at runtime.
 
-Honesty note: validation is currently an offline presence/format check
-(honor-system v1). Server-side key validation is on the roadmap and is NOT
-claimed to exist yet. What Pro unlocks today is concrete and shippable:
+Validation is real: the key must carry a valid Ed25519 signature from the
+operator's license key and must not be expired (see ``license.py``). A random
+string, a tampered key, or an expired key does NOT unlock Pro — it fails closed.
+Verification is offline and needs only the published *public* key, so there is no
+phone-home and no embedded secret.
+
+What Pro unlocks today is concrete and shippable (NOT "live payments"):
   - no upgrade nag on the free-call limit
   - ledger export to CSV/JSON via the `tollbooth export` command
   - higher default daily spend cap
+  - priority support
 
-This module imports nothing from the rest of the package, to avoid import cycles.
+This module imports only the sibling ``license`` module, to avoid import cycles.
 """
 from __future__ import annotations
 
 import os
 
+from .license import LicenseClaim, describe_license, verify_license
+
 FREE_DAILY_CAP_USD = 10.0
 PRO_DAILY_CAP_USD = 1000.0
-_MIN_KEY_LEN = 8
+
+ENV_LICENSE_KEY = "TOLLBOOTH_LICENSE_KEY"
 
 _state: dict[str, str | None] = {"key": None}
 
@@ -34,14 +42,23 @@ def get_license() -> str | None:
     """Return the active license key from runtime state or environment."""
     if _state["key"]:
         return _state["key"]
-    env = os.environ.get("TOLLBOOTH_LICENSE_KEY", "").strip()
+    env = os.environ.get(ENV_LICENSE_KEY, "").strip()
     return env or None
 
 
+def license_claim() -> LicenseClaim | None:
+    """Return the verified LicenseClaim for the active key, or None."""
+    return verify_license(get_license())
+
+
+def license_status() -> dict:
+    """Detail for the CLI/status: {valid, reason, plan, email, expires_at}."""
+    return describe_license(get_license())
+
+
 def pro_enabled() -> bool:
-    """True if a plausibly-valid Pro license is present (offline check)."""
-    key = get_license()
-    return bool(key) and len(key) >= _MIN_KEY_LEN
+    """True only if a genuine, unexpired Pro license is present (offline check)."""
+    return license_claim() is not None
 
 
 def tier() -> str:
