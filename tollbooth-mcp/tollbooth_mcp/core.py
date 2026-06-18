@@ -11,7 +11,7 @@ import uuid
 from collections import Counter
 from typing import Any
 
-from nano_empire_tollbooth import Tollbooth, TollboothConfig
+from nano_empire_tollbooth import SettlementStatus, Tollbooth, TollboothConfig
 
 DEMO_PRICE_USD = 0.01
 PAPER_NOTE = "paper mode — simulated payment, no real money moves"
@@ -72,7 +72,8 @@ async def demo_paid_call(text: str, payer: str = "demo-agent") -> dict[str, Any]
     record = await booth.charge(task_id, source_agent=payer, target_agent="tollbooth-mcp")
     try:
         result = _summarize(text)
-        await booth.release(task_id)
+        if record.status == SettlementStatus.ESCROW_LOCKED:
+            await booth.release(task_id)
     except Exception:
         await booth.refund(task_id)
         raise

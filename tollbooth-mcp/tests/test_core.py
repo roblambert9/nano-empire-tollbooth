@@ -1,6 +1,4 @@
 """Tests for tollbooth-mcp core logic (no MCP runtime required)."""
-import asyncio
-
 import pytest
 
 from tollbooth_mcp import core
@@ -25,11 +23,12 @@ def test_quote_toll_unique_nonces():
     assert core.quote_toll()["nonce"] != core.quote_toll()["nonce"]
 
 
-def test_demo_paid_call_returns_result_and_receipt():
-    out = asyncio.run(core.demo_paid_call(
+@pytest.mark.asyncio
+async def test_demo_paid_call_returns_result_and_receipt():
+    out = await core.demo_paid_call(
         "Agents call each other to complete tasks. A tollbooth meters each "
         "request. Escrow locks on call and releases on success. Receipts prove work."
-    ))
+    )
     assert out["receipt"]["status"] == "released"
     assert out["receipt"]["amount_usd"] == core.DEMO_PRICE_USD
     assert "no real money" in out["receipt"]["note"]
@@ -37,9 +36,10 @@ def test_demo_paid_call_returns_result_and_receipt():
     assert out["session_total_usd"] == core.DEMO_PRICE_USD
 
 
-def test_ledger_accumulates():
-    asyncio.run(core.demo_paid_call("One sentence here. Another sentence there."))
-    asyncio.run(core.demo_paid_call("More text to summarize. And a second sentence."))
+@pytest.mark.asyncio
+async def test_ledger_accumulates():
+    await core.demo_paid_call("One sentence here. Another sentence there.")
+    await core.demo_paid_call("More text to summarize. And a second sentence.")
     ledger = core.get_session_ledger()
     assert ledger["count"] == 2
     assert ledger["total_usd"] == round(2 * core.DEMO_PRICE_USD, 4)

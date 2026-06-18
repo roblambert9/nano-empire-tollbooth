@@ -54,7 +54,7 @@ endpoint already calls the verifier. Stripe's ~50¢ floor is why cent-level mete
 settles on-chain; Tollbooth Pro ($19/mo) is a separate subscription for ledger
 export, higher caps, and priority support — not a payment rail.
 
-Tests: `33 passed`. Package: https://pypi.org/project/nano-empire-tollbooth/
+Tests: `89 passed`. Package: https://pypi.org/project/nano-empire-tollbooth/
 
 ## Proof 2: batch-netting settlement (2026-06-11)
 

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tollbooth-mcp"
 version = "0.1.0"
-description = "MCP server that demos agent pay-per-call inside your own AI. Paper mode: 402 challenge, payment, signed receipt — no real money moves."
+description = "MCP server that demos agent pay-per-call inside your own AI. Paper mode: 402 challenge, simulated payment, receipt record — no real money moves."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -19,11 +19,14 @@ classifiers = [
 ]
 dependencies = [
     "mcp>=1.2",
-    "nano-empire-tollbooth>=0.2.2",
+    "nano-empire-tollbooth>=0.3.0",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0"]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
 
 [project.scripts]
 tollbooth-mcp = "tollbooth_mcp.server:main"
@@ -36,3 +39,6 @@ Repository = "https://github.com/roblambert9/nano-empire-tollbooth"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["tollbooth_mcp*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
