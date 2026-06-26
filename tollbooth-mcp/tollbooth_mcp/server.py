@@ -12,7 +12,7 @@ mcp = FastMCP(
     "tollbooth",
     instructions=(
         "Demonstrates agent pay-per-call with nano-empire-tollbooth in PAPER MODE: "
-        "402 challenge, simulated payment, real escrow lifecycle, signed receipt. "
+        "402 challenge, simulated payment, real tollbooth lifecycle, receipt record. "
         "No real money moves. Start with quote_toll, then demo_paid_call."
     ),
 )
