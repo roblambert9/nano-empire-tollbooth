@@ -1,0 +1,6 @@
+interface:
+  display_name: "Nano Empire Tollbooth"
+  short_description: "Repo-specific patterns and workflows for nano-empire-tollbooth"
+  default_prompt: "Use the nano-empire-tollbooth repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
