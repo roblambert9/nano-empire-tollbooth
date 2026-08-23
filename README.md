@@ -93,6 +93,27 @@ financial advice.
 3. In paper mode (default) nothing is charged. Set `paper_mode=False` plus your
    own verifier to move real funds.
 
+## Don't want to run your own settlement? Use the hosted API.
+
+The same tollbooth rails power a hosted, agent-native parser:
+
+**Excalidraw-to-Docs API** — POST any Excalidraw diagram or document, get clean
+markdown or structured JSON. Agents pay per call via x402 (HTTP 402), no signup,
+no API key. Free tier: 5 parses/day.
+
+```
+POST https://nanoempireai.com/api/v1/parse
+{"source": "<excalidraw json>", "format": "auto", "output": "markdown"}
+```
+
+Full OpenAPI spec: https://nanoempireai.com/openapi.json
+Pricing: free 5/day · $0.005/call basic · $0.05/call premium (unlimited + LLM decomposition)
+
+**Proof over promises:** this stack has collected real money from external
+autonomous agents — no invoices, no sales calls. Two agents found the endpoint by
+crawling machine-readable docs and paid per call. The live counter is on the
+homepage: https://nanoempireai.com
+
 ## License
 
 MIT
