@@ -107,3 +107,21 @@ X-PAYMENT-RESPONSE: {"success": true, "transaction": "0x...", "network", "payer"
 Structural verification checks fields, version, recipient, amount, expiry.
 Signature verification belongs to the operator's facilitator — the SDK is
 honest about what paper mode does and does not prove.
+
+
+## Update 2026-08-22: first external revenue collected
+
+The mock-verifier run above proved the protocol. This month the hosted parser
+collected **real money from external autonomous agents**:
+
+| Metric | Value |
+|---|---|
+| External agents paid | 2 |
+| Paid calls served | 5+ |
+| Collected | $0.125 USD (x402 / per-call) |
+| Acquisition cost | $0 — agents found the endpoint via machine-readable docs |
+
+The endpoint they used: `POST https://nanoempireai.com/api/v1/parse`
+(Excalidraw-to-Docs — free 5/day, $0.005/call basic, $0.05/call premium).
+
+Still small. Still honest. The counter on https://nanoempireai.com updates live.
