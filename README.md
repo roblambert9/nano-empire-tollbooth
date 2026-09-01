@@ -1,6 +1,6 @@
 # nano-empire-tollbooth
 
-Monetize and meter any Python function with one decorator.
+Monetize any Python function with one decorator. Paper-mode metering is free. Live x402 settlement is optional and off until you wire a verifier.
 
 ```python
 from nano_empire_tollbooth import monetize
@@ -10,9 +10,9 @@ def summarize(text: str) -> str:
     return my_llm(text)
 ```
 
-Every call is metered and logged to a local JSONL ledger. Paper-mode metering is
-unlimited and free — a one-time upgrade prompt prints around call 100, and the
-function keeps working (it nags, it does not block).
+Every call is metered and written to a local JSONL ledger with a settlement hash. Paper mode does not charge. It nags after 100 calls. It does not block.
+
+Built in Ottawa by [Nano Empire AI](https://nanoempireai.com). MIT license.
 
 ## Install
 
@@ -20,54 +20,42 @@ function keeps working (it nags, it does not block).
 pip install nano-empire-tollbooth
 ```
 
-Python 3.9+, one dependency (pydantic).
-
-## Command line
-
-The package ships a `tollbooth` command that works over your local ledger:
+Python 3.9+. One dependency (pydantic).
 
 ```bash
-tollbooth status                 # show tier (free/pro) and a ledger summary
-tollbooth report                 # aggregate: calls, spend, by status
-tollbooth report --json          # same, machine readable
-tollbooth verify                 # integrity check of the ledger file
-tollbooth export --format csv    # export the ledger (Pro)
-tollbooth settle                 # batch-net released tolls into one charge-sized settlement (paper mode; --live fails closed until you wire your own rail)
+tollbooth status
+tollbooth report
+tollbooth verify
 ```
 
-## Free vs Pro
+## What this is
 
-What Pro actually unlocks today. No overstated claims.
+A decorator and a local ledger for agent-speed metering. Use it when a human Stripe Customer object is the wrong interface — when the caller is software.
+
+## What this is not
+
+Not a hosted payment processor. Not a subscription system. Not financial advice. Connecting real funds is your responsibility. Mainnet is a flip you make after you have a verifier.
+
+## Free vs Pro
 
 | | Free | Pro ($19/mo) |
 |---|---|---|
 | Metered calls | Unlimited (paper mode) | Unlimited (paper mode) |
 | Local JSONL ledger | Yes | Yes |
 | `report` and `verify` | Yes | Yes |
-| Upgrade prompt | Shown after 100 calls | Suppressed |
-| `tollbooth export` (CSV/JSON) | No | Yes |
+| Upgrade prompt | After 100 calls | Suppressed |
+| `tollbooth export` | No | Yes |
 | Default daily cap | $10 / agent | $1000 / agent |
 
-**Pro is in private setup and not yet purchasable.** The licensing pipeline
-(Ed25519-signed keys + checkout issuance) is built and tested but not wired live
-yet — so there's no buy link here on purpose. Watch the
-[repo](https://github.com/roblambert9/nano-empire-tollbooth) for availability.
-
-When you have a key, activate it with:
+**Pro is built and tested. It is not purchasable yet.** There is no buy link on purpose. Watch this repo.
 
 ```bash
 export TOLLBOOTH_LICENSE_KEY=your-key
 ```
 
-> License validation is a real offline check: each key carries an Ed25519
-> signature from the issuer plus an expiry, verified locally with the published
-> public key — no secret, no phone-home. A random, tampered, or expired key does
-> not unlock Pro. Online revocation before expiry is on the roadmap.
+License check is offline: Ed25519 signature + expiry, verified locally. No phone-home.
 
 ## Live settlement (experimental)
-
-The tollbooth includes an x402 hook so you can wire your own live settlement
-verifier:
 
 ```python
 from nano_empire_tollbooth import Tollbooth, TollboothConfig
@@ -75,44 +63,43 @@ from nano_empire_tollbooth import Tollbooth, TollboothConfig
 booth = Tollbooth(TollboothConfig(paper_mode=False))
 
 async def my_verifier(wallet, tx_signature, amount_usd):
-    # verify a real on-chain or off-chain payment, return True/False
     return await check_payment(wallet, tx_signature, amount_usd)
 
 booth.set_x402_verifier(my_verifier)
 ```
 
-This ships the escrow lifecycle (lock, release, refund) and the verifier hook.
-It does NOT include a hosted settlement backend. Connecting real funds is your
-responsibility and is on the project roadmap. This is informational and not
-financial advice.
+Escrow lifecycle (lock, release, refund) ships. A hosted settlement backend does not.
 
-## How metering works
+## Human products (buy these today)
 
-1. Decorate any sync or async function with `@monetize(price_usd=...)`.
-2. Each call writes a record to `logs/toll_ledger.jsonl` with a settlement hash.
-3. In paper mode (default) nothing is charged. Set `paper_mode=False` plus your
-   own verifier to move real funds.
+If you want Nano Empire to do the thinking:
 
-## Don't want to run your own settlement? Use the hosted API.
+- **MCP Tool Metering Readiness Audit — $99**  
+  Metering map, price shape, paper-mode demo against your endpoint, copy-paste plan, risk notes.  
+  [Book the audit](https://buy.stripe.com/28EcN61rC9Dh6if1NCfAc01) · [What you get](https://nanoempireai.com/audit-offer.html)
 
-The same tollbooth rails power a hosted, agent-native parser:
+- **LandTrace report — $29**  
+  Year-over-year physical change of a land parcel from satellite embeddings.  
+  [Samples](https://nanoempireai.com/landtrace/)
 
-**Excalidraw-to-Docs API** — POST any Excalidraw diagram or document, get clean
-markdown or structured JSON. Agents pay per call via x402 (HTTP 402), no signup,
-no API key. Free tier: 5 parses/day.
+- **RFP compliance matrix — from $149**  
+  Every shall/must/will (and French doit/devra) extracted into a response-ready matrix. First public tender free.  
+  Email rob@nanoempireai.com
 
-```
-POST https://nanoempireai.com/api/v1/parse
-{"source": "<excalidraw json>", "format": "auto", "output": "markdown"}
-```
+## Hosted parser
 
-Full OpenAPI spec: https://nanoempireai.com/openapi.json
-Pricing: free 5/day · $0.005/call basic · $0.05/call premium (unlimited + LLM decomposition)
+Same rails, hosted:
 
-**Proof over promises:** this stack has collected real money from external
-autonomous agents — no invoices, no sales calls. Two agents found the endpoint by
-crawling machine-readable docs and paid per call. The live counter is on the
-homepage: https://nanoempireai.com
+`POST https://nanoempireai.com/api/v1/parse`  
+OpenAPI: https://nanoempireai.com/openapi.json  
+Free 5/day · $0.005 basic · $0.05 premium
+
+## Links
+
+- Site: https://nanoempireai.com
+- Tollbooth division: https://nanoempireai.com/tollbooth/
+- Simulator: https://nanoempireai.com/simulator/
+- Contact: rob@nanoempireai.com
 
 ## License
 
