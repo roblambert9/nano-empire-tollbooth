@@ -315,6 +315,38 @@ class Tollbooth:
         """Get toll record by task ID."""
         return self._records.get(task_id)
 
+    def verify_receipt(self, task_id: str) -> tuple[bool, str]:
+        """Verify a toll receipt for completeness and signature validity.
+
+        Returns (is_valid, reason). Checks:
+        1. Record exists and is in RELEASED status
+        2. tx_signature is not a paper/live placeholder
+        3. If signature is real hex, validates structural integrity
+
+        Full on-chain EIP-712 verification requires the operator to wire
+        a verifier via set_x402_verifier(). This method handles local checks.
+        """
+        record = self._records.get(task_id)
+        if record is None:
+            return False, f"no toll record for task_id={task_id}"
+        if record.status != SettlementStatus.RELEASED:
+            return False, f"receipt not released: status={record.status.value}"
+
+        sig = record.tx_signature or ""
+        if sig in ("", "paper_mode", "live"):
+            if self.config.paper_mode:
+                return True, "paper-mode receipt (no real signature expected)"
+            return False, f"placeholder signature '{sig}' is not a real Ed25519 signature"
+
+        if len(sig) < 64:
+            return False, f"signature too short ({len(sig)} chars, expected >= 64 hex)"
+        try:
+            bytes.fromhex(sig[:64])
+        except ValueError:
+            return False, "signature is not valid hex"
+
+        return True, "receipt valid (local checks passed; full verification requires wired verifier)"
+
     def get_stats(self) -> dict[str, Any]:
         """Get tollbooth statistics."""
         return {
@@ -335,7 +367,10 @@ class Tollbooth:
 
     async def _verify_x402(self, payer_wallet: str, tx_signature: str, amount: float) -> bool:
         if self._x402_verify is None:
-            return True  # no verifier configured, trust
+            # Fail closed: if no verifier is wired, reject the payment.
+            # Paper mode never reaches this path (charge returns early).
+            logger.error("x402 verification attempted but no verifier configured — rejecting")
+            return False
         try:
             return await self._x402_verify(payer_wallet, tx_signature, amount)
         except Exception as exc:

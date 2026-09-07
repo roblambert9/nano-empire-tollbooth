@@ -1,11 +1,10 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+ENV PYTHONUNBUFFERED=1
 
 COPY . .
 
-EXPOSE 8403
+RUN pip install --no-cache-dir . ./tollbooth-mcp
 
-CMD ["python", "-m", "vision.parser_gateway"]
+ENTRYPOINT ["tollbooth-mcp"]
